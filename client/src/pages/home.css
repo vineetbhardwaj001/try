@@ -1,0 +1,109 @@
+/* src/pages/home.css */
+
+.home-container {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom right, #f2f2f2, #dbe9e5);
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Nav styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 0;
+  margin: 10px 0 0 0;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+/* Main welcome section */
+.home-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.welcome-text {
+  max-width: 600px;
+}
+
+.welcome-heading {
+  font-size: 28px;
+  color: #1f4037;
+  margin-bottom: 10px;
+}
+
+.home-lower {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.level-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.level-btn,
+.start-btn {
+  padding: 12px 24px;
+  background-color: #1f4037;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 200px;
+  transition: background 0.3s;
+}
+
+.level-btn:hover,
+.start-btn:hover {
+  background-color: #4caf50;
+}
+
+/* ✅ Responsive design */
+@media (min-width: 768px) {
+  .home-lower {
+    flex-direction: row;
+    gap: 40px;
+  }
+
+  .level-buttons {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .level-btn,
+  .start-btn {
+    margin: 5px;
+    width: auto;
+  }
+}

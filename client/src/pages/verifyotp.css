@@ -1,0 +1,116 @@
+.otp-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #2c3e50, #8e44ad);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.otp-box {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(15px);
+  padding: 40px;
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  color: #fff;
+}
+
+.otp-box h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.otp-box input {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 16px;
+  outline: none;
+}
+
+.otp-box input::placeholder {
+  color: #ececec;
+}
+
+.otp-box button {
+  width: 100%;
+  padding: 12px;
+  background-color: #ff4081;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s;
+}
+
+.otp-box button:hover {
+  background-color: #e91e63;
+}
+
+.message {
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: #fff;
+}
+
+/* Music-like animation */
+.otp-bars {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.otp-bars span {
+  width: 6px;
+  height: 20px;
+  margin: 0 3px;
+  background: white;
+  display: inline-block;
+  animation: bounce 1s infinite ease-in-out;
+  border-radius: 3px;
+}
+
+.otp-bars span:nth-child(1) { animation-delay: 0s; }
+.otp-bars span:nth-child(2) { animation-delay: 0.2s; }
+.otp-bars span:nth-child(3) { animation-delay: 0.4s; }
+.otp-bars span:nth-child(4) { animation-delay: 0.6s; }
+.otp-bars span:nth-child(5) { animation-delay: 0.8s; }
+
+@keyframes bounce {
+  0%, 100% { height: 20px; }
+  50% { height: 40px; }
+}
+.resend-otp {
+  margin-top: 10px;
+}
+
+.resend-otp button {
+  padding: 6px 12px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.resend-otp button:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+}
+
+.resend {
+  font-size: 0.9rem;
+  color: green;
+  margin-top: 5px;
+}

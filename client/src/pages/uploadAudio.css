@@ -1,0 +1,42 @@
+/* src/pages/uploadAudio.css */
+
+.upload-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  background: linear-gradient(to right, #e0f7fa, #fff);
+}
+
+.upload-container h2 {
+  font-size: 24px;
+  color: #00695c;
+}
+
+.upload-container input[type="file"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.upload-container button {
+  padding: 10px 20px;
+  background-color: #00695c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.upload-container button:hover {
+  background-color: #004d40;
+}
+
+.upload-message {
+  font-size: 14px;
+  color: #333;
+}
