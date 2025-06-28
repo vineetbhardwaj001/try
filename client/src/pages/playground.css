@@ -1,44 +1,82 @@
-.timeline-scroll {
-  overflow-x: auto;
+.timeline-container {
+  border: 2px solid #333;
+  height: 300px;
+  overflow: hidden;
+  margin-top: 20px;
   position: relative;
-  height: 80px;
-  border: 1px solid #ccc;
-  margin: 20px 0;
-  background-color: #f7f7f7;
+  background-color: #f0f0f0;
 }
 
-.timeline-track {
+.timeline-board {
   position: relative;
-  height: 100%;
-  min-width: 2000px;
+  height: 300px;
+  width: 10000px;
 }
 
-.timeline-chord {
+.string-line {
   position: absolute;
-  height: 60px;
-  top: 10px;
-  border-radius: 4px;
-  text-align: center;
-  line-height: 60px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #bbb;
+}
+
+.chord-box {
+  position: absolute;
+  height: 40px;
+  line-height: 40px;
+  color: #000;
   font-weight: bold;
-  font-size: 14px;
-  color: white;
+  text-align: center;
+  border-radius: 6px;
+  transition: left 0.1s linear;
 }
 
-.timeline-chord.green {
-  background-color: #4caf50;
-}
-
-.timeline-chord.red {
-  background-color: #f44336;
-}
-
-.playhead {
+.fixed-playhead {
   position: absolute;
   top: 0;
-  bottom: 0;
+  left: 100px;
+  height: 100%;
   width: 2px;
-  background-color: black;
+  background-color: red;
   z-index: 10;
-  transition: left 0.1s linear;
+}
+
+.feedback-box {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 5px;
+}
+
+.mic-visual {
+  margin-top: 20px;
+}
+canvas {
+  border: 1px solid #aaa;
+  background: #fff;
+}
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  background: #222;
+  color: white;
+  padding: 10px 20px;
+  align-items: center;
+  border-bottom: 2px solid #4CAF50;
+}
+
+.nav-btn {
+  background: #4CAF50;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.nav-btn:hover {
+  background-color: #45a049;
 }
