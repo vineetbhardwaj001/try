@@ -27,10 +27,10 @@ const Home = () => {
 
       <div className="home-lower">
         <div className="level-buttons">
-          <button className="level-btn" onClick={() => navigate("/upload-audio")}>Beginner</button>
-          <button className="level-btn" onClick={() => navigate("/upload-audio")}>Intermediate</button>
-          <button className="level-btn" onClick={() => navigate("/upload-audio")}>Advance</button>
-          <button className="start-btn" onClick={() => navigate("/upload-audio")}>Let's Start ➤</button>
+          <button className="level-btn" onClick={() => navigate("/upload-ideal")}>Beginner</button>
+          <button className="level-btn" onClick={() => navigate("/upload-ideal")}>Intermediate</button>
+          <button className="level-btn" onClick={() => navigate("/upload-ideal")}>Advance</button>
+          <button className="start-btn" onClick={() => navigate("/upload-ideal")}>Let's Start ➤</button>
         </div>
       </div>
     </div>

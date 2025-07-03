@@ -80,3 +80,49 @@ canvas {
 .nav-btn:hover {
   background-color: #45a049;
 }
+.upload-practice-label {
+  display: inline-block;
+  background-color: #f0f0f0;
+  color: #333;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: auto;
+  transition: background-color 0.2s ease;
+}
+
+.upload-practice-label:hover {
+  background-color: #e0e0e0;
+}
+
+.upload-practice-label input[type="file"] {
+  display: none;
+}
+.playground-wrapper { padding: 20px; font-family: sans-serif; }
+.navbar, .header { display: flex; align-items: center; gap: 6px; }
+.timeline-container { overflow-x: scroll; height: 300px; position: relative; border: 1px solid #ccc; margin: 20px 0; }
+.timeline-track { position: relative; height: 300px; width: 50px; }
+.playhead { position: absolute; top: 0; left: 100px; width: 2px; height: 100%; background: black; z-index: 10; }
+.chord-box { position: absolute; padding: 5px; border-radius: 4px; color: white; font-weight: bold; }
+.chord-box.green { background-color: green; }
+.chord-box.red { background-color: red; }
+.string-line { position: absolute; width: 100%; height: 1px; background: #ccc; }
+.score-box { margin-top: 20px; }
+.feedback-summary ul { max-height: 150px; overflow-y: scroll; }
+.mic-summary-box {
+  background-color: #222;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 20px;
+  color: #eee;
+  border: 1px solid #444;
+}
+
+.mic-summary-box summary {
+  cursor: pointer;
+  font-weight: bold;
+  color: #00bfff;
+}
+

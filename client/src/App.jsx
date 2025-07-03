@@ -8,6 +8,7 @@ import Home from './pages/home'
 import UploadAudio from './pages/UploadAudio'
 import Playground from "./pages/Playground";
 import Feedback from './pages/Feedback';
+import UploadIdeal from "./pages/UploadIdeal";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
               <Route path="/upload-audio" element={<UploadAudio />} />
               <Route path="/feedback" element={<Playground />} />
               <Route path="/feedback" element={<Feedback />} />
+              <Route path="/upload-ideal" element={<UploadIdeal />} />
          </Routes>
     
   )
