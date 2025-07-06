@@ -6,7 +6,7 @@ import axios from "axios";
 
 const PIXELS_PER_SECOND = 100;
 const STRINGS = ["E", "B", "G", "D", "A", "E"];
-const socket = io("http://localhost:5000");
+const socket = io("https://aaroh-backend.onrender.com");
 
 const Playground = () => {
   const navigate = useNavigate();
@@ -217,7 +217,7 @@ const [idealChords, setIdealChords] = useState([]);
         </div>
       </div>
 
-      <audio ref={audioRef} src={`http://localhost:5000${idealPath}`} />
+      <audio ref={audioRef} src={`https://aaroh-backend.onrender.com${idealPath}`} />
 
       <div className="timeline-container" ref={timelineRef}>
         <div className="timeline-track">

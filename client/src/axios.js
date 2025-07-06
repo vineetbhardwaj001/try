@@ -1,13 +1,15 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5000/api', // adjust for prod
+  baseURL: import.meta.env.VITE_API_BASE_URL,  // ✅ uses env variable
   headers: {
     'Content-Type': 'application/json'
-  }
+  },
+  withCredentials: true  // ✅ optional if using cookies
 });
 
 export default instance;
+
 
 /*import axios from 'axios';
 

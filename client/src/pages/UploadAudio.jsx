@@ -19,7 +19,7 @@ const UploadAudio = () => {
 
     try {
       // 🔼 Upload to backend
-      const uploadRes = await fetch("http://localhost:5000/api/upload-both", {
+      const uploadRes = await fetch("https://aaroh-backend.onrender.com/api/upload-both", {
         method: "POST",
         body: formData,
       });

@@ -16,7 +16,7 @@ const PracticeUpload = () => {
     formData.append("idealPath", idealPath);
 
     try {
-      const res = await fetch("http://localhost:5000/api/analyze", {
+      const res = await fetch("https://aaroh-backend.onrender.com/api/analyze", {
         method: "POST",
         body: formData, // ✅ Don’t manually set Content-Type
       });

@@ -61,7 +61,7 @@ const handleUpload = async () => {
   formData.append("userId", "user123"); // Optional metadata
 
   try {
-    const res = await fetch("http://localhost:5000/api/upload-ideal", {
+    const res = await fetch("https://aaroh-backend.onrender.com/api/upload-ideal", {
       method: "POST",
       body: formData
     });
