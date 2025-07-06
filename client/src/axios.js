@@ -1,14 +1,15 @@
-import axios from 'axios';
+import axios from "axios";
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,  // ✅ uses env variable
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json'
+    "Content-Type": "application/json"
   },
-  withCredentials: true  // ✅ optional if using cookies
+  withCredentials: true  // ✅ must match backend config
 });
 
 export default instance;
+
 
 
 /*import axios from 'axios';
