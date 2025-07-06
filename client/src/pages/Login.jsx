@@ -16,14 +16,31 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post('/auth/login', form);
-      localStorage.setItem('token', res.data.token);
+       const { token, user } = res.data;
+
+    if (!user.isVerified) {
+      // 👉 Send OTP automatically
+      await axios.post(`/api/auth/send-otp`, {
+        email: user.email
+      }, { withCredentials: true });
+
+      // 👉 Save email to localStorage or context if needed
+      localStorage.setItem("pendingEmail", user.email);
+
+      // 👉 Redirect to Verify OTP Page
+      navigate("/verify-otp");
+    } else {
+      // 👉 User is verified, proceed normally
+     localStorage.setItem('token', res.data.token);
       setMessage('Login successful!');
       setTimeout(() => navigate('/home'), 1500);
-    } catch (err) {
-      setMessage(err.response?.data?.message || 'Login failed');
     }
-  };
 
+  } catch (err) {
+    setMessage(err.response?.data?.message || 'Login failed');
+  }
+};
+    
   return (
     <div className="login-container">
       <div className="login-box">
