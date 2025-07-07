@@ -108,7 +108,10 @@ const [idealChords, setIdealChords] = useState([]);
 
     const res = await axios.post("/api/analyze", {
       method: "POST",
-      body: formData,
+       headers: {
+      "Content-Type": undefined, // ✅ allow browser to auto-set correct multipart headers
+    }
+     // body: formData,
     });
 
     const data = await res.json();

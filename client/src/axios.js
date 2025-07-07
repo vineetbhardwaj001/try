@@ -2,19 +2,13 @@ import axios from "axios";
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  withCredentials: true,
-});
-
-// 🚀 Automatically remove 'Content-Type' for FormData
-instance.interceptors.request.use(config => {
-  if (config.data instanceof FormData) {
-    delete config.headers["Content-Type"];
-  }
-  return config;
+  headers: {
+    "Content-Type": "application/json"
+  },
+  withCredentials: true  // ✅ must match backend config
 });
 
 export default instance;
-
 
 
 

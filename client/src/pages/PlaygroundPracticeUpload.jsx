@@ -18,7 +18,10 @@ const PracticeUpload = () => {
     try {
       const res = await fetch("https://aaroh-backend.onrender.com/api/analyze", {
         method: "POST",
-        body: formData, // ✅ Don’t manually set Content-Type
+         headers: {
+      "Content-Type": undefined, // ✅ allow browser to auto-set correct multipart headers
+    }
+        //body: formData, // ✅ Don’t manually set Content-Type
       });
 
       const result = await res.json();
