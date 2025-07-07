@@ -1,100 +1,158 @@
-.register-container {
-  min-height: 100vh;
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to right, #240b36, #c31432);
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #6e00ff, #ff0099);
-  font-family: 'Segoe UI', sans-serif;
 }
 
-.register-box {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px);
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
-  width: 90%;
-  max-width: 400px;
-  text-align: center;
-  color: #fff;
+.modern-login-container {
+  width: 100%;
+  max-width: 960px;
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
 
-.register-box h2 {
-  font-size: 24px;
+/* Login + Welcome Panels */
+.modern-login-box {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.modern-login-form,
+.modern-login-welcome {
+  flex: 1;
+  min-width: 300px;
+  padding: 40px 30px;
+}
+
+.modern-login-form {
+  background: #fff;
+}
+
+.modern-login-form h2 {
+  color: #240b36;
   margin-bottom: 20px;
-  font-weight: bold;
+  text-align: center;
 }
 
-.register-box input {
-  width: 100%;
-  padding: 12px 15px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.3);
-  color: #fff;
-  font-size: 16px;
-  outline: none;
+.modern-login-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.register-box input::placeholder {
-  color: #f0d1f0;
-}
-
-.register-box button {
-  width: 100%;
+input[type='email'],
+input[type='password'] {
   padding: 12px;
-  background-color: #ff0057;
-  color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.gradient-button {
+  background: linear-gradient(to right, #3a0ca3, #7209b7);
+  color: white;
+  padding: 12px;
   border: none;
-  border-radius: 12px;
-  font-size: 16px;
+  border-radius: 25px;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 10px;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
 }
 
-.register-box button:hover {
-  background-color: #e6004c;
+.gradient-button:hover {
+  background: linear-gradient(to right, #7209b7, #3a0ca3);
 }
 
-.switch-text {
-  margin-top: 12px;
+.social-text {
+  text-align: center;
+  margin: 10px 0;
+  font-size: 13px;
+  color: #666;
+}
+
+.social-icons {
+  text-align: center;
+}
+
+.social-icons i {
+  margin: 0 10px;
+  font-size: 18px;
+  color: #3a0ca3;
+  cursor: pointer;
+}
+
+.message {
+  text-align: center;
+  color: green;
   font-size: 14px;
-  color: #fff;
 }
 
-.switch-text a {
-  color: #fff;
-  font-weight: bold;
-  text-decoration: underline;
-}
-
-/* Music bar animation */
-.music-bars {
+/* Right Panel */
+.modern-login-welcome {
+  background: linear-gradient(to right, #3a0ca3, #7209b7);
+  color: white;
+  text-align: center;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  margin-top: 20px;
+  border-radius: 0 15px 15px 0;
 }
 
-.music-bars span {
-  width: 6px;
-  height: 20px;
-  margin: 0 3px;
-  background: white;
-  display: inline-block;
-  animation: bounce 1s infinite ease-in-out;
-  border-radius: 3px;
+.modern-login-welcome .logo {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
 }
 
-.music-bars span:nth-child(1) { animation-delay: 0s; }
-.music-bars span:nth-child(2) { animation-delay: 0.2s; }
-.music-bars span:nth-child(3) { animation-delay: 0.4s; }
-.music-bars span:nth-child(4) { animation-delay: 0.6s; }
-.music-bars span:nth-child(5) { animation-delay: 0.8s; }
+.modern-login-welcome h1 {
+  margin-bottom: 10px;
+  font-size: 24px;
+}
 
-@keyframes bounce {
-  0%, 100% { height: 20px; }
-  50% { height: 40px; }
+.modern-login-welcome p {
+  font-size: 14px;
+  padding: 0 15px;
+  margin-bottom: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modern-login-container {
+    flex-direction: column;
+    max-width: 90%;
+    margin: auto;
+  }
+
+  .modern-login-box {
+    flex-direction: column;
+  }
+
+  .modern-login-welcome {
+    border-radius: 0 0 15px 15px;
+    padding: 30px 20px;
+  }
 }

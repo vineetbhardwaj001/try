@@ -24,37 +24,58 @@ const Register = () => {
   };
 
   return (
-    <div className="register-container">
-      <div className="register-box">
-        <h2>🎶 Create Your Account</h2>
-        {message && <p className="message">{message}</p>}
-        <form onSubmit={handleSubmit}>
-          <input
-            name="email"
-            type="email"
-            placeholder="Email Address"
-            required
-            value={form.email}
-            onChange={handleChange}
-          />
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            required
-            value={form.password}
-            onChange={handleChange}
-          />
-          <button type="submit">Register</button>
-        </form>
+    <div className="modern-login-container">
+      <div className="modern-login-box">
+        {/* Left Panel - Register Form */}
+        <div className="modern-login-form">
+          <h2>SIGN UP</h2>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email address"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
+            <button type="submit" className="gradient-button">REGISTER</button>
+            {message && <p className="message">{message}</p>}
+            <p className="switch-text">
+              Already have an account? <a href="/login">Log In</a>
+            </p>
+          </form>
+          <div className="social-text"></div>
+          <div className="social-icons">
+            <i className="fab fa-facebook-f"></i>
+            <i className="fab fa-twitter"></i>
+            <i className="fab fa-google"></i>
+            <i className="fab fa-linkedin-in"></i>
+          </div>
+        </div>
 
-        <p className="switch-text">
-          Already have an account? <a href="/login">Log In</a>
-        </p>
-
-        {/* Music bars animation */}
-        <div className="music-bars">
-          <span></span><span></span><span></span><span></span><span></span>
+        {/* Right Panel - Welcome Text */}
+        <div className="modern-login-welcome">
+          <div className="logo">Logo Here</div>
+          <h1>Welcome TO AAROH AI !</h1>
+          <p>
+            Start your musical journey with us. Connect, learn and play like never before.
+          </p>
+          <button className="gradient-button" onClick={() => navigate('/login')}>LOG IN</button>
+          <div className="social-text"></div>
+          <div className="social-icons">
+            <i className="fab fa-facebook-f"></i>
+            <i className="fab fa-twitter"></i>
+            <i className="fab fa-google"></i>
+            <i className="fab fa-linkedin-in"></i>
+          </div>
         </div>
       </div>
     </div>
