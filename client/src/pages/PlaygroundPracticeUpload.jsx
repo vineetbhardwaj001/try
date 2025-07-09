@@ -15,12 +15,11 @@ const PracticeUpload = () => {
     formData.append("practice", practiceFile);
     formData.append("idealPath", idealPath);
 
-    try {
-      const res = await fetch("https://aaroh-backend.onrender.com/api/analyze", {
-        method: "POST",
-         headers: {
-      "Content-Type": undefined, // ✅ allow browser to auto-set correct multipart headers
-    }
+      try {
+    const res = await fetch("https://aaroh-backend.onrender.com/api/upload-ideal", {
+      method: "POST",
+      body: formData
+  
         //body: formData, // ✅ Don’t manually set Content-Type
       });
 

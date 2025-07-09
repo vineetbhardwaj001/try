@@ -53,48 +53,57 @@ const UploadIdeal = () => {
   const [pitch, setPitch] = useState([]);
   const navigate = useNavigate();
 
-const handleUpload = async () => {
-  if (!idealFile) return alert("Please upload ideal audio");
+  const handleUpload = async () => {
+    if (!idealFile) return alert("Please upload ideal audio");
 
-  const formData = new FormData();
-  formData.append("ideal", idealFile); // ✅ Correct variable
-  formData.append("userId", "user123"); // Optional metadata
+    const formData = new FormData();
+    formData.append("ideal", idealFile);
+    formData.append("userId", "user123");
 
-  try {
-    const res = await fetch("https://aaroh-backend.onrender.com/api/upload-ideal", {
-      method: "POST",
-      body: formData
-    });
+    try {
+      const res = await fetch("https://aaroh-backend.onrender.com/api/upload-ideal", {
+        method: "POST",
+        body: formData
+      });
 
-    const data = await res.json();
-    console.log("Ideal uploaded:", data.idealPath);
+      const data = await res.json();
+      console.log("✅ Ideal uploaded:", data.idealPath);
 
-    if (!data.idealPath || !Array.isArray(data.feedback)) {
-      throw new Error("Invalid response from server");
+      if (!data.idealPath || !Array.isArray(data.feedback)) {
+        throw new Error("Invalid response from server");
+      }
+
+      localStorage.setItem("idealPath", data.idealPath);
+      localStorage.setItem("feedback", JSON.stringify(data.feedback));
+
+      // ✅ Store timeline-friendly feedback for Playground
+      const timelineData = data.feedback.map(f => ({
+        chord: f.chord,
+        correct: true, // All ideal chords are reference
+        start: f.start,
+        end: f.end
+      }));
+      localStorage.setItem("ideal_feedback", JSON.stringify(timelineData));
+
+      if (Array.isArray(data.pitchIdeal)) {
+        setPitch(data.pitchIdeal);
+      }
+
+      alert("✅ Ideal audio uploaded and analyzed");
+      navigate("/playground"); // or "/feedback" if you're using a separate analysis page
+
+    } catch (err) {
+      console.error("❌ Upload failed:", err);
+      alert("❌ Upload failed. Try again.");
     }
-
-    localStorage.setItem("idealPath", data.idealPath);
-    localStorage.setItem("feedback", JSON.stringify(data.feedback));
-
-    if (Array.isArray(data.pitchIdeal)) {
-      setPitch(data.pitchIdeal);
-    }
-
-    alert("✅ Ideal audio uploaded and analyzed");
-    navigate("/feedback");
-  } catch (err) {
-    console.error(err);
-    alert("❌ Upload failed");
-  }
-};
-
+  };
 
   const pitchData = {
-    labels: pitch.map((p) => p.time),
+    labels: pitch.map(p => p.time),
     datasets: [
       {
         label: "Ideal Pitch",
-        data: pitch.map((p) => p.freq),
+        data: pitch.map(p => p.freq),
         borderColor: "red",
         backgroundColor: "rgba(255,0,0,0.1)",
         fill: false,
@@ -107,7 +116,11 @@ const handleUpload = async () => {
   return (
     <div className="upload-container">
       <h2>🎼 Upload Ideal Audio</h2>
-      <input type="file" accept="audio/*" onChange={(e) => setIdealFile(e.target.files[0])} />
+      <input
+        type="file"
+        accept="audio/*"
+        onChange={(e) => setIdealFile(e.target.files[0])}
+      />
       <button onClick={handleUpload}>Upload & Analyze</button>
 
       {pitch.length > 0 && (

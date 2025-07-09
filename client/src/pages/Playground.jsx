@@ -106,12 +106,9 @@ const [idealChords, setIdealChords] = useState([]);
     formData.append("practice", file);
     formData.append("idealPath", idealPath);
 
-    const res = await axios.post("/api/analyze", {
+    const res = await fetch.post("https://aaroh-backend.onrender.com/api/analyze", {
       method: "POST",
-       headers: {
-      "Content-Type": undefined, // ✅ allow browser to auto-set correct multipart headers
-    }
-     // body: formData,
+      body: formData
     });
 
     const data = await res.json();
