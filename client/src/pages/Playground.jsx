@@ -97,7 +97,7 @@ const handlePracticeUpload = async (e) => {
   formData.append("idealPath", idealPath);
 
   try {
-     const res = await fetch("https://aaroh-backend.onrender.com/api/upload-ideal", {
+     const res = await fetch("https://aaroh-backend.onrender.com/api/analyze", {
       method: "POST",
       body: formData
     });
