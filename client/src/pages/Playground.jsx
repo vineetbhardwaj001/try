@@ -88,7 +88,49 @@ const Playground = () => {
     setIsPlaying(!isPlaying);
   };
 
-  const handlePracticeUpload = async (e) => {
+const handlePracticeUpload = async (e) => {
+  const file = e.target.files[0];
+  if (!file || !idealPath) return alert("Missing file or idealPath");
+
+  const formData = new FormData();
+  formData.append("practice", file);
+  formData.append("idealPath", idealPath);
+
+  try {
+    const res = await axios.post("/api/analyze", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    const data = res.data; // ✅ FIX: extract response data
+
+    if (Array.isArray(data.feedback)) {
+      setFeedback(data.feedback);
+      setPracticeSummary({
+        accuracy: data.accuracy,
+        level: data.level,
+        stars: Math.round(data.accuracy / 20),
+        mistakes: data.feedback.filter(f => !f.correct).length,
+        correct: data.feedback.filter(f => f.correct).length,
+        total: data.feedback.length,
+        missingChords: data.feedback.filter(f => !f.correct).map(f => ({
+          chord: f.chord,
+          time: f.start,
+        })),
+      });
+      alert("✅ Practice audio analyzed!");
+    } else {
+      alert("❌ Invalid feedback from server");
+    }
+  } catch (err) {
+    console.error("❌ Upload failed:", err);
+    alert("❌ Failed to upload practice audio. See console.");
+  }
+};
+
+
+ /* const handlePracticeUpload = async (e) => {
     const file = e.target.files[0];
     if (!file || !idealPath) return alert("Missing file or idealPath");
 
@@ -120,7 +162,7 @@ const Playground = () => {
     } else {
       alert("❌ Invalid feedback");
     }
-  };
+  };*/
 
   const handleStartMicStream = async () => {
     try {
