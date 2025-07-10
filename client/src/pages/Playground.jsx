@@ -97,10 +97,9 @@ const handlePracticeUpload = async (e) => {
   formData.append("idealPath", idealPath);
 
   try {
-    const res = await axios.post("/api/analyze", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+     const res = await fetch("https://aaroh-backend.onrender.com/api/upload-ideal", {
+      method: "POST",
+      body: formData
     });
 
     const data = res.data; // ✅ FIX: extract response data
