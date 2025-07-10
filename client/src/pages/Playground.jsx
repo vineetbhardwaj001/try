@@ -102,7 +102,8 @@ const handlePracticeUpload = async (e) => {
       body: formData
     });
 
-    const data = res.data; // ✅ FIX: extract response data
+    const data = await res.json(); // ✅ FIXED
+ // ✅ FIX: extract response data
 
     if (Array.isArray(data.feedback)) {
       setFeedback(data.feedback);
