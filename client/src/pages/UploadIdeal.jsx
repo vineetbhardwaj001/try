@@ -90,7 +90,7 @@ const UploadIdeal = () => {
       }
 
       alert("✅ Ideal audio uploaded and analyzed");
-      navigate("/playground"); // or "/feedback" if you're using a separate analysis page
+      navigate("/feedback"); // or "/feedback" if you're using a separate analysis page
 
     } catch (err) {
       console.error("❌ Upload failed:", err);

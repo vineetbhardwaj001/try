@@ -11,6 +11,320 @@ const socket = io("https://aaroh-backend.onrender.com");
 const Playground = () => {
   const navigate = useNavigate();
   const [feedback, setFeedback] = useState([]);
+  const [idealChords, setIdealChords] = useState([]);
+  const [micSummary, setMicSummary] = useState(null);
+  const [practiceSummary, setPracticeSummary] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [tempo, setTempo] = useState(1);
+  const [isRecording, setIsRecording] = useState(false);
+  const [status, setStatus] = useState("Idle");
+  const [log, setLog] = useState([]);
+  const [currentTime, setCurrentTime] = useState(0);
+
+  const idealPath = localStorage.getItem("idealPath");
+  const audioRef = useRef(null);
+  const timelineRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+
+  useEffect(() => {
+    if (!idealPath) navigate("/upload-ideal");
+
+    const raw = localStorage.getItem("ideal_feedback");
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) setIdealChords(parsed);
+      } catch (e) {
+        console.error("Error parsing ideal chords");
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    let animationFrameId;
+
+    const updateScroll = () => {
+      if (isPlaying && audioRef.current && timelineRef.current) {
+        const time = audioRef.current.currentTime;
+        setCurrentTime(time);
+        const scrollX = time * PIXELS_PER_SECOND * tempo;
+        timelineRef.current.scrollTo({ left: scrollX, behavior: "smooth" });
+        animationFrameId = requestAnimationFrame(updateScroll);
+      }
+    };
+
+    if (isPlaying) {
+      animationFrameId = requestAnimationFrame(updateScroll);
+    }
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isPlaying, tempo]);
+
+  useEffect(() => {
+    socket.on("status", (msg) => {
+      setLog((prev) => [...prev, msg]);
+      setStatus(msg);
+    });
+
+    socket.on("chord-feedback", (data) => {
+      setFeedback(data);
+    });
+
+    socket.on("mic-final-feedback", (data) => {
+      setMicSummary(data.summary || null);
+    });
+
+    return () => {
+      socket.off("status");
+      socket.off("chord-feedback");
+      socket.off("mic-final-feedback");
+    };
+  }, []);
+
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    audioRef.current.playbackRate = tempo;
+    isPlaying ? audioRef.current.pause() : audioRef.current.play();
+    setIsPlaying(!isPlaying);
+  };
+
+  const handlePracticeUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file || !idealPath) return alert("Missing file or idealPath");
+
+    const formData = new FormData();
+    formData.append("practice", file);
+    formData.append("idealPath", idealPath);
+
+    const res = await axios.post("/api/analyze", formData);
+    const data = res.data;
+
+    if (Array.isArray(data.feedback)) {
+      setFeedback(data.feedback);
+      setPracticeSummary({
+        accuracy: data.accuracy,
+        level: data.level,
+        stars: Math.round(data.accuracy / 20),
+        mistakes: data.feedback.filter(f => !f.correct).length,
+        correct: data.feedback.filter(f => f.correct).length,
+        total: data.feedback.length,
+        missingChords: data.feedback.filter(f => !f.correct).map(f => ({
+          chord: f.chord,
+          time: f.start
+        }))
+      });
+      alert("✅ Practice audio analyzed!");
+    } else {
+      alert("❌ Invalid feedback");
+    }
+  };
+
+  const handleStartMicStream = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream, { mimeType: "audio/webm" });
+
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const arrayBuffer = reader.result;
+            socket.emit("mic-audio-chunk", arrayBuffer);
+          };
+          reader.readAsArrayBuffer(e.data);
+        }
+      };
+
+      recorder.onstop = () => {
+        socket.emit("mic-recording-end");
+      };
+
+      mediaRecorderRef.current = recorder;
+      recorder.start(1000);
+      setIsRecording(true);
+      setStatus("🎤 Live Recording (1s chunks)");
+    } catch (err) {
+      alert("🎤 Mic access denied: " + err.message);
+    }
+  };
+
+  const handleStopMicStream = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
+
+  const renderStars = (accuracy) => "⭐".repeat(Math.round((accuracy || 0) / 20));
+  const getMedal = (accuracy) => {
+    if (accuracy >= 85) return "🥇 Gold";
+    if (accuracy >= 70) return "🥈 Silver";
+    if (accuracy >= 50) return "🥉 Bronze";
+    return "🎵 Keep Practicing";
+  };
+  const getTips = (level) => {
+    switch (level) {
+      case "Beginner": return "Try slowing down tempo and focus on chord accuracy.";
+      case "Intermediate": return "Work on timing and switching chords smoothly.";
+      case "Professional": return "Excellent work! Try playing with dynamics and feel.";
+      default: return "Keep practicing!";
+    }
+  };
+
+  return (
+    <div className="playground-wrapper">
+      <div className="navbar">
+        <h3>🎸 Aaroh AI Playground</h3>
+        <div className="nav-actions">
+          <label className="upload-practice-label">
+            🎧 Upload Practice Audio:
+            <input type="file" accept="audio/*" onChange={handlePracticeUpload} />
+          </label>
+          {isRecording ? (
+            <button onClick={handleStopMicStream}>⛔ Stop Mic</button>
+          ) : (
+            <button onClick={handleStartMicStream}>🎙️ Start Mic</button>
+          )}
+        </div>
+      </div>
+
+      <div className="header">
+        <h2>🎶 Chord Feedback Timeline</h2>
+        <div className="controls">
+          <button onClick={togglePlay}>{isPlaying ? "⏸ Pause" : "▶️ Play"}</button>
+          Tempo:
+          <button onClick={() => setTempo(0.5)}>0.5x</button>
+          <button onClick={() => setTempo(1)}>1x</button>
+          <button onClick={() => setTempo(2)}>2x</button>
+        </div>
+      </div>
+
+      <audio ref={audioRef} src={`https://aaroh-backend.onrender.com${idealPath}`} />
+
+      <div className="timeline-container" ref={timelineRef}>
+        <div className="timeline-track">
+          <div className="playhead" />
+
+          {/* ✅ Ideal Chords (reference) */}
+          {idealChords.map((item, i) => {
+            const isActive = currentTime >= item.start && currentTime < (item.end || item.start + 1);
+            return (
+              <div
+                key={`ideal-${i}`}
+                className={`chord-box blue ${isActive ? "active" : ""}`}
+                style={{
+                  left: `${item.start * PIXELS_PER_SECOND}px`,
+                  top: `-20px`,
+                }}
+              >
+                {item.chord}
+              </div>
+            );
+          })}
+
+          {/* ✅ Practice/Mic Feedback */}
+          {feedback.map((item, i) => {
+            const isActive = currentTime >= item.start && currentTime < (item.end || item.start + 1);
+            return (
+              <div
+                key={i}
+                className={`chord-box ${item.correct ? "green" : "red"} ${isActive ? "active" : ""}`}
+                style={{
+                  left: `${item.start * PIXELS_PER_SECOND}px`,
+                  top: `${item.stringIndex * 50}px`,
+                }}
+              >
+                {item.chord}
+              </div>
+            );
+          })}
+
+          {/* Strings */}
+          {STRINGS.map((_, i) => (
+            <div key={i} className="string-line" style={{ top: `${i * 50}px` }} />
+          ))}
+        </div>
+      </div>
+
+      <div className="feedback-summary">
+        <p><strong>Status:</strong> {status}</p>
+        <div className="log-box">
+          <h4>📋 Process Logs</h4>
+          <pre style={{ whiteSpace: "pre-wrap" }}>{log.join("\n")}</pre>
+        </div>
+
+        {(practiceSummary || micSummary) && (
+          <div className="feedback-box">
+            <h3>📊 Performance Summary</h3>
+            <p><strong>Accuracy:</strong> {(practiceSummary?.accuracy || micSummary?.accuracy)?.toFixed(2)}%</p>
+            <p><strong>Medal:</strong> {getMedal(practiceSummary?.accuracy || micSummary?.accuracy)}</p>
+            <p><strong>Stars:</strong> {renderStars(practiceSummary?.accuracy || micSummary?.accuracy)}</p>
+            <p><strong>Level:</strong> {practiceSummary?.level || micSummary?.level}</p>
+            <p><strong>Guidance:</strong> {getTips(practiceSummary?.level || micSummary?.level)}</p>
+
+            {micSummary && (
+              <>
+                <p><strong>Best Chord:</strong> {micSummary.bestChord}</p>
+                <p><strong>Most Mistaken Chord:</strong> {micSummary.worstChord}</p>
+                <p><strong>Duration:</strong> {micSummary.duration}s</p>
+
+                <div className="mistake-columns">
+                  <div className="mistake-section">
+                    <h4>🎯 Transition Mistakes</h4>
+                    <ul>
+                      {(micSummary.transitionsWrong || []).map((t, i) => (
+                        <li key={i}>{t.from} → {t.to} ({t.count} times)</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mistake-section">
+                    <h4>❌ Missing Chords</h4>
+                    <ul>
+                      {(practiceSummary?.missingChords || micSummary?.missingChords || []).map((c, idx) => (
+                        <li key={idx}>{c.chord} at {c.time}s</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </>
+            )}
+
+            <div className="stats-grid">
+              <div><strong>Total Chords:</strong></div>
+              <div className="stat-value">{practiceSummary?.total || micSummary?.totalChords}</div>
+
+              <div><strong>Correct:</strong></div>
+              <div className="stat-value green">{practiceSummary?.correct || micSummary?.correctChords}</div>
+
+              <div><strong>Mistakes:</strong></div>
+              <div className="stat-value red">{practiceSummary?.mistakes || micSummary?.mistakes}</div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Playground;
+
+
+/* 100% working per not show ideal chords 
+
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
+import "./playground.css";
+import axios from "axios";
+
+const PIXELS_PER_SECOND = 100;
+const STRINGS = ["E", "B", "G", "D", "A", "E"];
+const socket = io("https://aaroh-backend.onrender.com");
+
+const Playground = () => {
+  const navigate = useNavigate();
+  const [feedback, setFeedback] = useState([]);
   const [micSummary, setMicSummary] = useState(null);
   const [practiceSummary, setPracticeSummary] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -106,9 +420,9 @@ const [idealChords, setIdealChords] = useState([]);
     formData.append("practice", file);
     formData.append("idealPath", idealPath);
 
-    const res = await fetch.post("https://aaroh-backend.onrender.com/api/analyze", {
+    const res = await axios.post("/api/analyze", {
       method: "POST",
-      body: formData
+      body: formData,
     });
 
     const data = await res.json();
@@ -258,8 +572,8 @@ const [idealChords, setIdealChords] = useState([]);
             <p><strong>Stars:</strong> {renderStars(practiceSummary?.accuracy || micSummary?.accuracy)}</p>
             <p><strong>Level:</strong> {practiceSummary?.level || micSummary?.level}</p>
             <p><strong>Guidance:</strong> {getTips(practiceSummary?.level || micSummary?.level)}</p>
-            {/* 🆕 New fields */}
-    {micSummary && (
+            {/* 🆕 New fields *///}
+    /*{micSummary && (
   <>
     <p><strong>Best Chord:</strong> {micSummary.bestChord}</p>
     <p><strong>Most Mistaken Chord:</strong> {micSummary.worstChord}</p>
@@ -305,7 +619,7 @@ const [idealChords, setIdealChords] = useState([]);
   );
 };
 
-export default Playground;
+export default Playground;*/
 
 
 
