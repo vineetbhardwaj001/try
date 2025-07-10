@@ -96,8 +96,11 @@ const Playground = () => {
     formData.append("practice", file);
     formData.append("idealPath", idealPath);
 
-    const res = await axios.post("/api/analyze", formData);
-    const data = res.data;
+    const res = await axios.post("/api/analyze", formData, {
+  headers: {
+    "Content-Type": "multipart/form-data"
+  }
+});
 
     if (Array.isArray(data.feedback)) {
       setFeedback(data.feedback);

@@ -1,4 +1,4 @@
-/* Main layout */
+/* Layout */
 .playground-wrapper {
   padding: 16px;
   font-family: "Segoe UI", sans-serif;
@@ -25,14 +25,12 @@
   margin: 0;
 }
 
-/* Button group on right */
 .nav-actions {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
 }
 
-/* Upload button */
 .upload-practice-label {
   background-color: white;
   color: #1f3580;
@@ -50,7 +48,6 @@
   display: none;
 }
 
-/* Mic button */
 .navbar button {
   background-color: white;
   color: #1f3580;
@@ -97,25 +94,16 @@
   height: 300px;
   width: 100%;
   overflow-x: auto;
-  background-color: white;
+  background: #f8fafc;
   margin-top: 16px;
   border: 1px solid #ccc;
   border-radius: 10px;
 }
-.timeline-container {
-  overflow-x: auto;
-  position: relative;
-  height: 300px;
-  width: 100%;
-  background: #f8fafc;
-}
 
-
-/* Track and scroll area */
 .timeline-track {
   position: relative;
   height: 100%;
-  width: 2000px; /* Fixed max width */
+  width: 2000px;
 }
 
 .playhead {
@@ -137,17 +125,18 @@
   background-color: #ccc;
 }
 
-/* Chord box */
+/* Chord Boxes */
 .chord-box {
   position: absolute;
   min-width: 5px;
   padding: 10px 10px;
   font-size: 13px;
-  text-align: center;
- 
   font-weight: bold;
+  text-align: center;
   color: #003b3b;
   background-color: #d0fff0;
+  border-radius: 6px;
+  z-index: 4;
 }
 
 .chord-box.red {
@@ -158,12 +147,21 @@
   background-color: #d0fff0;
 }
 
+.chord-box.blue {
+  background-color: #cce5ff;
+  border: 1px dashed #0077b6;
+  color: black;
+  font-weight: bold;
+  opacity: 0.9;
+  z-index: 3;
+}
+
 .chord-box.active {
   transform: scale(1.1);
   border: 2px solid black;
 }
 
-/* Feedback Section */
+/* Feedback Summary */
 .feedback-summary {
   margin-top: 20px;
 }
@@ -178,22 +176,27 @@
 /* Stats */
 .stats-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px 16px;
-  margin: 10px 0;
+  grid-template-columns: auto 1fr;
+  row-gap: 8px;
+  column-gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.stat-value {
+  text-align: right;
+  font-weight: bold;
 }
 
 .stat-value.green {
-  color: green;
-  font-weight: bold;
+  color: #28a745;
 }
 
 .stat-value.red {
-  color: red;
-  font-weight: bold;
+  color: #dc3545;
 }
 
-/* Log box */
+/* Logs */
 .log-box {
   margin-top: 10px;
   background-color: #fff;
@@ -205,7 +208,40 @@
   font-size: 13px;
 }
 
-/* Responsive: Mobile */
+/* Mistake section */
+.mistake-columns {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  margin-top: 15px;
+  flex-wrap: wrap;
+}
+
+.mistake-section {
+  flex: 1;
+  min-width: 250px;
+  max-height: 200px;
+  overflow-y: auto;
+  background: #f8f8f8;
+  padding: 10px 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.mistake-section h4 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+.mistake-section ul {
+  padding-left: 18px;
+  list-style-type: disc;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .navbar {
     flex-direction: column;
@@ -231,7 +267,8 @@
     padding: 4px 8px;
   }
 
-  .upload-practice-label, .navbar button {
+  .upload-practice-label,
+  .navbar button {
     width: 100%;
     justify-content: center;
     text-align: center;
